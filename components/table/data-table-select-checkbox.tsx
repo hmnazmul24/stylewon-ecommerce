@@ -1,5 +1,5 @@
 import { Row, Table } from "@tanstack/react-table";
-import { Checkbox } from "../../../../for-portfolio/tew-youth-dev-resource/src/components/ui/checkbox";
+import { Checkbox } from "../ui/checkbox";
 
 interface CheckBoxHeaderProps<TData> {
   table: Table<TData>;
