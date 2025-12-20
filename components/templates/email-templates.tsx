@@ -7,7 +7,12 @@ import {
   Button,
   Preview,
   Section,
+  Hr,
 } from "@react-email/components";
+
+/* ---------------------------------------------------------------- */
+/* Email Verification — Link */
+/* ---------------------------------------------------------------- */
 
 interface EmailVerificationLinkProps {
   verifyUrl: string;
@@ -21,26 +26,26 @@ export function EmailVerificationLinkTemplate({
   return (
     <Html>
       <Head />
-      <Preview>
-        Verify your email address to activate your Stylewon account
-      </Preview>
+      <Preview>Confirm your email for Stylewon</Preview>
 
       <Body style={body}>
         <Container style={container}>
-          <Section style={{ textAlign: "center" }}>
-            <Text style={brand}>Stylewon</Text>
-          </Section>
+          <Text style={brand}>Stylewon</Text>
 
           <Text style={text}>Hello,</Text>
 
           <Text style={text}>
-            Please confirm your email address to complete your Stylewon account
-            setup.
+            You’re receiving this email because someone signed up for a Stylewon
+            account using this email address.
           </Text>
 
-          <Section style={{ margin: "24px 0", textAlign: "center" }}>
+          <Text style={text}>
+            Please confirm your email address to complete the setup.
+          </Text>
+
+          <Section style={center}>
             <Button href={verifyUrl} style={button}>
-              Verify email
+              Confirm email
             </Button>
           </Section>
 
@@ -48,18 +53,25 @@ export function EmailVerificationLinkTemplate({
             This link will expire in {expiresInMinutes} minutes.
           </Text>
 
-          {/* Fallback link (VERY important for email clients) */}
           <Text style={fallback}>
-            Or copy and paste this URL into your browser:
+            If the button doesn’t work, copy and paste this link into your
+            browser:
             <br />
             <a href={verifyUrl} style={link}>
               {verifyUrl}
             </a>
           </Text>
 
+          <Hr style={divider} />
+
           <Text style={footer}>
-            If you did not create a Stylewon account, you can safely ignore this
-            email.
+            Stylewon is an online platform for modern shopping experiences.
+            <br />
+            If you didn’t request this email, no action is required.
+            <br />
+            <br />© {new Date().getFullYear()} Stylewon. All rights reserved.
+            <br />
+            Contact: support@stylewon.com
           </Text>
         </Container>
       </Body>
@@ -67,7 +79,9 @@ export function EmailVerificationLinkTemplate({
   );
 }
 
-//--------------------------------------------------------//
+/* ---------------------------------------------------------------- */
+/* Email Verification — OTP */
+/* ---------------------------------------------------------------- */
 
 interface EmailVerificationOtpProps {
   otp: string;
@@ -81,19 +95,20 @@ export function EmailVerificationOtpTemplate({
   return (
     <Html>
       <Head />
-      <Preview>Your Stylewon verification code</Preview>
+      <Preview>Your Stylewon confirmation code</Preview>
 
       <Body style={body}>
         <Container style={container}>
-          <Section style={{ textAlign: "center" }}>
-            <Text style={brand}>Stylewon</Text>
-          </Section>
+          <Text style={brand}>Stylewon</Text>
 
           <Text style={text}>Hello,</Text>
 
           <Text style={text}>
-            Use the verification code below to confirm your email address.
+            You’re receiving this email because someone is trying to verify an
+            email address for a Stylewon account.
           </Text>
+
+          <Text style={text}>Use the code below to confirm your email:</Text>
 
           <Section style={otpContainer}>
             <Text style={otpStyle}>{otp}</Text>
@@ -103,14 +118,26 @@ export function EmailVerificationOtpTemplate({
             This code will expire in {expiresInMinutes} minutes.
           </Text>
 
+          <Hr style={divider} />
+
           <Text style={footer}>
-            For security reasons, do not share this code with anyone.
+            For security reasons, do not share this code.
+            <br />
+            If you didn’t request this, you can ignore this email.
+            <br />
+            <br />© {new Date().getFullYear()} Stylewon. All rights reserved.
+            <br />
+            Contact: support@stylewon.com
           </Text>
         </Container>
       </Body>
     </Html>
   );
 }
+
+/* ---------------------------------------------------------------- */
+/* Styles */
+/* ---------------------------------------------------------------- */
 
 const body = {
   backgroundColor: "#f6f6f6",
@@ -127,7 +154,7 @@ const container = {
 };
 
 const brand = {
-  fontSize: "22px",
+  fontSize: "20px",
   fontWeight: "700",
   marginBottom: "24px",
 };
@@ -138,10 +165,15 @@ const text = {
   lineHeight: "1.6",
 };
 
+const center = {
+  textAlign: "center" as const,
+  margin: "24px 0",
+};
+
 const button = {
   backgroundColor: "#111111",
   color: "#ffffff",
-  padding: "14px 24px",
+  padding: "12px 24px",
   borderRadius: "6px",
   fontSize: "14px",
   fontWeight: "600",
@@ -153,12 +185,6 @@ const muted = {
   fontSize: "13px",
   color: "#666666",
   marginTop: "16px",
-};
-
-const footer = {
-  fontSize: "12px",
-  color: "#888888",
-  marginTop: "24px",
 };
 
 const fallback = {
@@ -173,6 +199,17 @@ const link = {
   textDecoration: "underline",
 };
 
+const divider = {
+  margin: "24px 0",
+  borderColor: "#eeeeee",
+};
+
+const footer = {
+  fontSize: "11px",
+  color: "#888888",
+  lineHeight: "1.6",
+};
+
 const otpContainer = {
   backgroundColor: "#f2f2f2",
   borderRadius: "8px",
@@ -182,7 +219,7 @@ const otpContainer = {
 };
 
 const otpStyle = {
-  fontSize: "28px",
+  fontSize: "26px",
   fontWeight: "700",
   letterSpacing: "6px",
 };

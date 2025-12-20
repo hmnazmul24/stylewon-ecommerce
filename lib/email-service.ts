@@ -5,6 +5,7 @@ import {
   EmailVerificationOtpTemplate,
 } from "@/components/templates/email-templates";
 import { Resend } from "resend";
+import "dotenv";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 export async function sendEmailOTP({
@@ -18,7 +19,7 @@ export async function sendEmailOTP({
     const { data, error } = await resend.emails.send({
       from: "Stylewon <no-reply@stylewon.com>",
       to: [email],
-      subject: "Email Verficiation",
+      subject: "Your Stylewon confirmation code",
       react: EmailVerificationOtpTemplate({
         expiresInMinutes: 1,
         otp,
@@ -46,7 +47,7 @@ export async function sendEmailLink({
     const { data, error } = await resend.emails.send({
       from: "Stylewon <no-reply@stylewon.com>",
       to: [email],
-      subject: "Email Verficiation",
+      subject: "Confirm your email for Stylewon",
       react: EmailVerificationLinkTemplate({
         expiresInMinutes: 1,
         verifyUrl,
