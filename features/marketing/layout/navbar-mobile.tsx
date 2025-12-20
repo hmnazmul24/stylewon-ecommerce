@@ -148,8 +148,8 @@ export function NavbarMobile(session: UserSession) {
                         `?local-cart-count=${guestUserCartItems.length}`,
                       );
                     }, 500);
-                    setOpenDrawer(false);
                   }
+                  setOpenDrawer(false);
                 }}
               />
             )}

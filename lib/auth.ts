@@ -6,6 +6,8 @@ import { hashPassword } from "better-auth/crypto";
 import { emailOTP, phoneNumber } from "better-auth/plugins";
 import { and, eq } from "drizzle-orm";
 import { OTP_EXPIRE_IN_SECONDS } from "./constants";
+import { sendSMS } from "./sms-service";
+import { sendEmailLink, sendEmailOTP } from "./email-service";
 
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
@@ -20,8 +22,14 @@ export const auth = betterAuth({
     },
   },
   emailVerification: {
-    async sendVerificationEmail(data) {
-      console.log("email varrification link =>", data.url);
+    async sendVerificationEmail(data, ctx) {
+      console.log(ctx);
+
+      await sendEmailLink({
+        email: data.user.email,
+        verifyUrl: data.url,
+      });
+      console.log("email varrification link =>", data);
     },
   },
 
@@ -66,6 +74,7 @@ export const auth = betterAuth({
           code,
           phoneNumber,
         );
+        await sendSMS({ phoneNumber, code, type: "RESET_PASSWORD" });
       },
       async callbackOnVerification(data, ctx) {
         const userId = data.user.id;
@@ -92,8 +101,9 @@ export const auth = betterAuth({
         }
       },
 
-      sendOTP: ({ phoneNumber, code }, ctx) => {
+      sendOTP: async ({ phoneNumber, code }, ctx) => {
         console.log("otp send to => ", phoneNumber, code);
+        await sendSMS({ code, phoneNumber, type: "ACCOUNT_VERFICATION" });
       },
       signUpOnVerification: {
         getTempEmail: (phoneNumber) => {
@@ -104,10 +114,12 @@ export const auth = betterAuth({
         },
       },
     }),
+
     emailOTP({
       expiresIn: OTP_EXPIRE_IN_SECONDS,
       overrideDefaultEmailVerification: true,
       async sendVerificationOTP(data, ctx) {
+        await sendEmailOTP({ email: data.email, otp: data.otp });
         console.log("email varification otp =>", data);
       },
     }),
