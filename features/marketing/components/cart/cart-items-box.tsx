@@ -9,6 +9,8 @@ import { CartEmptyBox } from "./cart-empty-box";
 import { useRouter } from "next/navigation";
 import { useGuestUserCart } from "../../hooks/use-guest-user-cart";
 import { CompletedAuthBox } from "@/features/auth/components/completed-auth-box";
+import { useQuery } from "@tanstack/react-query";
+import { getBillingsInfo } from "../../server/billing.actions";
 export function CartItemsBox({
   carts,
   type,
@@ -20,6 +22,13 @@ export function CartItemsBox({
 }) {
   const [shouldAuthBoxOpen, setShouldAuthBoxOpen] = useState(false);
   const router = useRouter();
+
+  //billing info
+
+  const billingMutation = useQuery({
+    queryKey: ["billings"],
+    queryFn: () => getBillingsInfo(),
+  });
   // total amount
   const total =
     carts.length === 0
@@ -52,12 +61,17 @@ export function CartItemsBox({
           Total : {total} &#x09F3;
         </div>
         <Button
+          disabled={type === "db" ? billingMutation.isPending : false}
           onClick={() => {
             if (type === "local") {
               setShouldAuthBoxOpen(true);
             } else {
               if (total !== 0) {
-                router.push("/checkout");
+                if (billingMutation.data) {
+                  router.push("/checkout/payment");
+                } else {
+                  router.push(`/checkout?redirect_to=payment`);
+                }
               }
               onClose();
             }

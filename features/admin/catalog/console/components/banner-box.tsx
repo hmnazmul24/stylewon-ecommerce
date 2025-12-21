@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
-import { Trash2, Upload } from "lucide-react";
+import { Trash, Trash2, Upload } from "lucide-react";
 import Image from "next/image";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { deleteBanner, getBanner, uploadBanner } from "../actionts";
@@ -77,7 +77,6 @@ export function BannerBox() {
     mutationFn: deleteBanner,
     onSuccess: async () => {
       await qc.invalidateQueries({ queryKey: ["banners"] });
-
       toast.success("Banner Deleted");
     },
   });
@@ -184,8 +183,18 @@ export function BannerBox() {
                     alt="uploaded banner"
                     className="h-32 w-full object-cover"
                   />
-                  <div className="text-muted-foreground truncate p-3 text-xs">
-                    {item.redirectTo || ""}
+                  <div className="flex items-center justify-between gap-1">
+                    <div className="text-muted-foreground truncate p-3 text-xs">
+                      {item.redirectTo || ""}
+                    </div>
+                    <Button
+                      disabled={deleteMutation.isPending}
+                      onClick={() => deleteMutation.mutate(item.id)}
+                      variant={"ghost"}
+                      className="text-destructive size-8 rounded-full"
+                    >
+                      <Trash />
+                    </Button>
                   </div>
                 </div>
               ))}

@@ -2,7 +2,7 @@
 #html_descriptions {
   font-size: 15px;
   line-height: 1.75;
-  color: #e5e7eb; /* neutral text */
+  color: #000000; /* neutral text */
 }
 
 /* Headings */
@@ -13,7 +13,7 @@
   font-weight: 600;
   line-height: 1.3;
   margin: 1.4em 0 0.6em;
-  color: #ffffff;
+  color: #000000;
 }
 
 #html_descriptions h1 {
@@ -32,6 +32,7 @@
 /* Paragraph */
 #html_descriptions p {
   margin: 0.75em 0;
+  color: #374151;
 }
 
 /* Strong / Bold */
@@ -44,7 +45,7 @@
 #html_descriptions i,
 #html_descriptions em {
   font-style: italic;
-  color: #d1d5db;
+  color: #090d13;
 }
 
 /* Links */

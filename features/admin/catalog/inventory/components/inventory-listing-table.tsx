@@ -2,12 +2,13 @@
 import { DataTable } from "@/components/table/data-table";
 import DataTableActionDropdown from "@/components/table/data-table-action-dropdown";
 import { ColumnDef } from "@tanstack/react-table";
-import { Edit, Trash } from "lucide-react";
+import { Boxes, Edit, SendToBack, Trash } from "lucide-react";
 import { Fragment } from "react";
 
 import { useSuspenseQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import { getInventory } from "../queries";
+import { UpdateStock } from "./update-stock";
 
 export function InventoryListingTable() {
   const { data } = useSuspenseQuery({
@@ -48,24 +49,18 @@ export function InventoryListingTable() {
               {
                 dropdownItem: (
                   <Fragment>
-                    <Edit /> Edit Product
-                  </Fragment>
-                ),
-                access: {
-                  show: "link",
-                  link: `/admin/catalog/products/${row.original.id}/update`,
-                },
-              },
-
-              {
-                dropdownItem: (
-                  <Fragment>
-                    <Trash /> Delete
+                    <Boxes /> Update Stock
                   </Fragment>
                 ),
                 access: {
                   show: "dialog",
-                  component: <div>fsfsfdasdfasd</div>,
+                  component: (
+                    <UpdateStock
+                      productId={row.original.id}
+                      initialStock={row.original.stocks || "0"}
+                      productName={row.original.name}
+                    />
+                  ),
                 },
               },
             ]}

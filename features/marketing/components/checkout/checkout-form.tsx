@@ -1,5 +1,6 @@
 "use client";
 
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -16,16 +17,6 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { LoadingSwap } from "@/components/ui/loading-swap";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation, useSuspenseQuery } from "@tanstack/react-query";
-import { Controller, useForm } from "react-hook-form";
-import { toast } from "sonner";
-import { billingInfoSchema, BillingSchemaType } from "../../schemas";
-import {
-  getBillingsInfo,
-  updateBillingsInfo,
-} from "../../server/billing.actions";
-import { ChevronRight, Edit } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -34,10 +25,18 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { districts, upazilas } from "@/lib/constants";
-import { Badge } from "@/components/ui/badge";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useSuspenseQuery } from "@tanstack/react-query";
+import { Edit, Save } from "lucide-react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Controller, useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { billingInfoSchema, BillingSchemaType } from "../../schemas";
+import {
+  getBillingsInfo,
+  updateBillingsInfo,
+} from "../../server/billing.actions";
 import { BillingsPhoneNumberEdit } from "./billing-phone-number-edit";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
 
 export function BillingForm() {
   const {
@@ -47,6 +46,7 @@ export function BillingForm() {
     queryFn: () => getBillingsInfo(),
   });
   const router = useRouter();
+  const params = useSearchParams().get("redirect_to");
 
   const form = useForm<BillingSchemaType>({
     resolver: zodResolver(billingInfoSchema),
@@ -65,7 +65,9 @@ export function BillingForm() {
     mutationFn: async (inputs: BillingSchemaType) => {
       await updateBillingsInfo(inputs);
       toast.success("Billing info updated");
-      router.push("/checkout/payment");
+      if (params === "payment") {
+        router.push("/checkout/payment");
+      }
     },
   });
 
@@ -105,10 +107,10 @@ export function BillingForm() {
                 <Field data-invalid={fieldState.invalid}>
                   <FieldLabel>Phone No.</FieldLabel>
                   <div className="flex items-center gap-4">
-                    <Badge>{field.value}</Badge>
+                    <Badge>{field.value || "No number added"}</Badge>
                     <BillingsPhoneNumberEdit
                       phoneNumber={billings.phone}
-                      setPhoneNumber={(v) => form.setValue("phone", v)}
+                      setPhoneNumber={(v) => field.onChange(v)}
                     >
                       <Button type="button" variant={"ghost"}>
                         <Edit />
@@ -135,7 +137,10 @@ export function BillingForm() {
                   <Select
                     name={field.name}
                     value={field.value}
-                    onValueChange={field.onChange}
+                    onValueChange={(v) => {
+                      field.onChange(v);
+                      form.setValue("upazilaId", "");
+                    }}
                   >
                     <SelectTrigger
                       id="form-rhf-select-district"
@@ -231,9 +236,9 @@ export function BillingForm() {
 
             <Field orientation={"vertical"} className="justify-end">
               <Button disabled={isPending}>
-                Go to payment
+                Save billing info
                 <LoadingSwap isLoading={isPending}>
-                  <ChevronRight />
+                  <Save />
                 </LoadingSwap>
               </Button>
             </Field>

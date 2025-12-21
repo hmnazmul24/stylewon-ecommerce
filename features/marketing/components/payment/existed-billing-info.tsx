@@ -28,7 +28,7 @@ export function ExistedBillingInfo() {
 
       {/* Action */}
       <div className="pt-2">
-        <Link href={"/checkout"}>
+        <Link href={"/checkout?redirect_to=payment"}>
           {" "}
           <Button type="button" variant="outline" className="w-full">
             <Edit /> Edit

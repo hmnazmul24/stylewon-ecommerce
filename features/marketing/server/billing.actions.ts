@@ -9,6 +9,7 @@ import { eq } from "drizzle-orm";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { BillingSchemaType } from "../schemas";
+import { sendSMS } from "@/lib/sms-service";
 
 type BillingInfoType = Omit<
   typeof billingInfo.$inferSelect,
@@ -73,8 +74,6 @@ export async function updateBillingsInfo(inputs: BillingSchemaType) {
     .update(billingInfo)
     .set({ ...inputs })
     .where(eq(billingInfo.userId, account.user.id));
-
-  return billings;
 }
 
 export async function sendOtpPhoneNumberVerify({
@@ -82,11 +81,11 @@ export async function sendOtpPhoneNumberVerify({
 }: {
   phoneNumber: string;
 }) {
-  await new Promise((res) => setTimeout(res, 100));
   const otp = generateNumericOTP();
-  // todo : send otp to phone
+  console.log(otp);
 
-  console.log(phoneNumber, "==>", otp);
+  await sendSMS({ code: otp, phoneNumber, type: "ACCOUNT_VERFICATION" });
+
   return { otp };
 }
 export async function getDeliveryPrices() {

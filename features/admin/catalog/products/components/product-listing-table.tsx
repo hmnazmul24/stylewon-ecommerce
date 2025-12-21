@@ -33,14 +33,28 @@ export default function ProductListingTable() {
         },
       },
       {
+        accessorKey: "id",
+        header: "Product Id",
+      },
+      {
         accessorKey: "name",
         header: "Name",
       },
 
       {
-        accessorKey: "price",
-        header: "Price",
+        header: "Price (Taka)",
+        cell: ({ row }) => {
+          return <div>{row.original.price}</div>;
+        },
       },
+
+      {
+        header: "Shipping Weights",
+        cell: ({ row }) => {
+          return <div className="">{row.original.shippingWeight}</div>;
+        },
+      },
+
       {
         id: "actions",
         cell: ({ row }) => (

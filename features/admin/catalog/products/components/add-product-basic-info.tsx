@@ -1,6 +1,4 @@
-import React, { Suspense } from "react";
-import { Controller, UseFormReturn } from "react-hook-form";
-import { AddProductSchemaType } from "../schemas";
+import TiptapEditor from "@/components/tiptap/tiptap-editor";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Field,
@@ -9,13 +7,20 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import TiptapEditor from "@/components/tiptap/tiptap-editor";
+import { Suspense } from "react";
+import { Controller, UseFormReturn } from "react-hook-form";
+import { AddProductSchemaType } from "../schemas";
 
 export default function AddProductBasicInfo({
   form,
 }: {
   form: UseFormReturn<AddProductSchemaType>;
 }) {
+  // const description = form.watch("description");
+  // useEffect(() => {
+  //   if (!description) {
+  //   }
+  // }, [description]);
   return (
     <Card>
       <CardHeader>

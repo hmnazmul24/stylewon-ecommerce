@@ -14,12 +14,14 @@ import {
 } from "../../server/billing.actions";
 import { placeOrder } from "../../server/placeorder.action";
 import { LoadingSwap } from "@/components/ui/loading-swap";
+import { getQueryClient } from "@/tanstack-query/get-query-client";
 
 type ShippingMethod = "outside_dhaka" | "inside_dhaka";
 type PaymentMethod = "cod" | "bkash" | "pathao" | "card";
 
 export function ShippingInfo() {
   const router = useRouter();
+  const qc = getQueryClient();
 
   // ...............states.............
   const [shipping, setShipping] = useState<ShippingMethod>("outside_dhaka");
@@ -42,7 +44,8 @@ export function ShippingInfo() {
   //............mutations.................
   const { mutate, isPending } = useMutation({
     mutationFn: placeOrder,
-    onSuccess: ({ message }) => {
+    onSuccess: async ({ message }) => {
+      await qc.invalidateQueries({ queryKey: ["user-cart"] });
       toast.success(message);
       router.push("/");
     },

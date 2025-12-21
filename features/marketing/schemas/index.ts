@@ -8,7 +8,7 @@ export const billingInfoSchema = z.object({
 
   phone: z
     .string()
-    .min(6, "Phone number must be at least 6 digits")
+    .min(10, "Phone number must be at least 10 digits")
     .max(20, "Phone number cannot exceed 20 digits")
     .regex(/^[0-9+\-\s]+$/, "Invalid phone number format"),
 

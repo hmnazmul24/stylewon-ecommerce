@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "@/drizzle/db";
-import { carts } from "@/drizzle/schema";
+import { carts, products } from "@/drizzle/schema";
 import { auth } from "@/lib/auth";
 import { and, eq } from "drizzle-orm";
 import { headers } from "next/headers";
@@ -49,14 +49,16 @@ export async function addToCart(
   return { message: "Product added to cart" };
 }
 
-//
+//------------------------------- cart actions---------------------//
 
 export async function cartActions({
   cartId,
   type,
+  productId,
 }: {
   type: "REMOVE_FROM_CART" | "INCREASE_QUANTITY" | "DECREASE_QUANTITY";
   cartId: string;
+  productId: string;
 }) {
   const account = await auth.api.getSession({ headers: await headers() });
   if (!account) {
@@ -76,10 +78,19 @@ export async function cartActions({
     await db.delete(carts).where(whereEqual);
   }
   if (type === "INCREASE_QUANTITY") {
-    await db
-      .update(carts)
-      .set({ quantity: cart.quantity + 1 })
-      .where(whereEqual);
+    const [existedQty] = await db
+      .select({ stock: products.stocks })
+      .from(products)
+      .where(eq(products.id, productId));
+
+    const existedQuantity = Number(existedQty.stock);
+    const newQuantity = cart.quantity + 1;
+    if (existedQuantity >= newQuantity) {
+      await db
+        .update(carts)
+        .set({ quantity: cart.quantity + 1 })
+        .where(whereEqual);
+    }
   }
   if (type === "DECREASE_QUANTITY") {
     await db
@@ -87,4 +98,26 @@ export async function cartActions({
       .set({ quantity: cart.quantity > 1 ? cart.quantity - 1 : cart.quantity })
       .where(whereEqual);
   }
+}
+
+//---------------------check quanity------------------------//
+
+export async function isQuantityExist({
+  productId,
+  quantity,
+}: {
+  quantity: number;
+  productId: string;
+}) {
+  const [res] = await db
+    .select({ stock: products.stocks })
+    .from(products)
+    .where(eq(products.id, productId));
+  if (res.stock) {
+    const existedStock = Number(res.stock);
+    if (existedStock >= quantity) {
+      return { existMore: true };
+    }
+  }
+  return { existMore: false, message: "No more available stock" };
 }

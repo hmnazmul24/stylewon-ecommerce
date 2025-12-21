@@ -152,8 +152,20 @@
   cursor: pointer;
 }
 
-/* html descriptions  */
-
-/* #html_descriptions p {
-  
-} */
+.marketing-main-page {
+  position: relative;
+}
+.marketing-main-page::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  z-index: -1;
+  /* background-color: red; */
+  background-image: url("/ecommerce-texture-bg.avif");
+  background-size: 300px;
+  background-repeat: repeat;
+  opacity: 0.3;
+}

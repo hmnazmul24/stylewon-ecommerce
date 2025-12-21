@@ -45,7 +45,7 @@ export function OrderListing() {
           <CardHeader className="pb-3">
             <div className="flex flex-wrap items-center justify-between gap-2">
               <CardTitle className="text-base font-semibold">
-                Order #{order.id.slice(0, 8)}
+                Order #{order.id}
               </CardTitle>
 
               <div className="flex items-center justify-center">
@@ -55,7 +55,6 @@ export function OrderListing() {
                 <Popover>
                   <PopoverTrigger asChild>
                     <Button
-                      onClick={() => mutate({ orderId: order.id })}
                       disabled={isPending}
                       variant={"ghost"}
                       size={"icon-sm"}
@@ -67,7 +66,12 @@ export function OrderListing() {
                     <h2 className="text-center">
                       do you want to cancel this order?
                     </h2>
-                    <Button variant={"destructive"}>Cancel</Button>
+                    <Button
+                      onClick={() => mutate({ orderId: order.id })}
+                      variant={"destructive"}
+                    >
+                      Cancel
+                    </Button>
                   </PopoverContent>
                 </Popover>
               </div>

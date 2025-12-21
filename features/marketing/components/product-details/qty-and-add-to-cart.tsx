@@ -13,7 +13,7 @@ import { useGuestUserCart } from "../../hooks/use-guest-user-cart";
 import { productDetails } from "../../server/queries";
 import { CartType } from "../../types";
 import { useProductSelection } from "../../hooks/use-product-selection";
-import { addToCart } from "../../server/cart.action";
+import { addToCart, isQuantityExist } from "../../server/cart.action";
 
 export function QtyAndAddToCart({
   product,
@@ -22,7 +22,8 @@ export function QtyAndAddToCart({
 }) {
   const { isPending, data } = authClient.useSession();
 
-  const { quantity, setQuantity, selectedImage } = useProductSelection();
+  const { quantity, setQuantity, selectedImage, selectedColor, selectedSize } =
+    useProductSelection();
   // local-cart
   const { guestUserAddItem } = useGuestUserCart();
   const qc = getQueryClient();
@@ -36,16 +37,40 @@ export function QtyAndAddToCart({
     },
   });
 
+  // actions for checking, is there any stocks avilable
+  const existCheckMutation = useMutation({
+    mutationFn: isQuantityExist,
+    onSuccess: ({ existMore, message }) => {
+      if (existMore) {
+        setQuantity(quantity + 1);
+      }
+      if (!existMore) {
+        toast.info(message);
+      }
+    },
+  });
+
   return (
     <Fragment>
       <div className="flex items-center gap-4">
         {Number(product.stocks) !== 0 ? (
           <div className="flex items-center gap-1">
-            <Button onClick={() => quantity > 1 && setQuantity(quantity - 1)}>
+            <Button
+              disabled={existCheckMutation.isPending}
+              onClick={() => quantity > 1 && setQuantity(quantity - 1)}
+            >
               <Minus />
             </Button>
             <Button>{quantity}</Button>
-            <Button onClick={() => setQuantity(quantity + 1)}>
+            <Button
+              disabled={existCheckMutation.isPending}
+              onClick={() =>
+                existCheckMutation.mutate({
+                  productId: product.id,
+                  quantity: quantity + 1,
+                })
+              }
+            >
               <Plus />
             </Button>
           </div>
@@ -71,6 +96,12 @@ export function QtyAndAddToCart({
             quantity,
             imageUrl: selectedImage,
           };
+          if (product.sizes.length && !selectedSize) {
+            return toast.info("Please select size");
+          }
+          if (product.colors.length && !selectedColor) {
+            return toast.info("Please select color");
+          }
           if (data) {
             addToCartMutation.mutate(info);
           } else {

@@ -42,6 +42,5 @@ export async function getBanner() {
   return res;
 }
 export async function deleteBanner(bannerId: string) {
-  const res = await db.delete(banners).where(eq(banners.id, bannerId));
-  return res;
+  await db.delete(banners).where(eq(banners.id, bannerId));
 }

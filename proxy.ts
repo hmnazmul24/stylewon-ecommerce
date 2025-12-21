@@ -9,8 +9,12 @@ export function proxy(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
 
   const sessionCookie = getSessionCookie(request);
+
   if (!sessionCookie && AUTH_ROUTES.some((r) => pathname.startsWith(r))) {
     return NextResponse.redirect(new URL("/", request.url));
+  }
+  if (pathname === ADMIN_ROUTE) {
+    return NextResponse.redirect(new URL("/admin/home/overviews", request.url));
   }
   if (!sessionCookie && pathname.startsWith(ADMIN_ROUTE)) {
     return NextResponse.redirect(new URL("/", request.url));

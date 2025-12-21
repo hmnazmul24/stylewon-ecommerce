@@ -4,9 +4,10 @@ import { Minus, Plus } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 import { useGuestUserCart } from "../../hooks/use-guest-user-cart";
-import { cartActions } from "../../server/cart.action";
+import { cartActions, isQuantityExist } from "../../server/cart.action";
 import { CartType } from "../../types";
 import { getQueryClient } from "@/tanstack-query/get-query-client";
+import { toast } from "sonner";
 
 export function CartItem({
   item,
@@ -27,18 +28,40 @@ export function CartItem({
       await qc.invalidateQueries({ queryKey: ["user-cart"] });
     },
   });
+  // actions for checking, is there any stocks avilable
+  const existCheckMutation = useMutation({
+    mutationFn: isQuantityExist,
+    onSuccess: ({ existMore, message }) => {
+      if (existMore) {
+        guestUserUpdateItemQty(item.productId, item.quantity + 1);
+      }
+      if (!existMore) {
+        toast.info(message);
+      }
+    },
+  });
+
   // utilities
   const cartAddQty = () => {
     if (type === "local") {
-      guestUserUpdateItemQty(item.productId, item.quantity + 1);
+      existCheckMutation.mutate({
+        productId: item.id!,
+        quantity: item.quantity + 1,
+      });
     }
     if (type === "db") {
       if (item.id) {
         setPendingType("INCREASE_QUANTITY");
-        mutate({ type: "INCREASE_QUANTITY", cartId: item.id });
+        mutate({
+          type: "INCREASE_QUANTITY",
+          cartId: item.id,
+          productId: item.productId,
+        });
       }
     }
   };
+
+  // =====> differ <=======
   const cartRemoveQty = () => {
     if (type === "local") {
       guestUserUpdateItemQty(
@@ -48,7 +71,11 @@ export function CartItem({
     }
     if (item.id) {
       setPendingType("DECREASE_QUANTITY");
-      mutate({ type: "DECREASE_QUANTITY", cartId: item.id });
+      mutate({
+        type: "DECREASE_QUANTITY",
+        cartId: item.id,
+        productId: item.productId,
+      });
     }
   };
   const cartDelete = () => {
@@ -57,7 +84,11 @@ export function CartItem({
     }
     if (item.id) {
       setPendingType("REMOVE_FROM_CART");
-      mutate({ type: "REMOVE_FROM_CART", cartId: item.id });
+      mutate({
+        type: "REMOVE_FROM_CART",
+        cartId: item.id,
+        productId: item.productId,
+      });
     }
   };
 
@@ -95,7 +126,10 @@ export function CartItem({
             </Button>
             <Button variant={"outline"}>{item.quantity}</Button>
             <Button
-              disabled={isPending && pendingType === "INCREASE_QUANTITY"}
+              disabled={
+                existCheckMutation.isPending ||
+                (isPending && pendingType === "INCREASE_QUANTITY")
+              }
               variant={"outline"}
               onClick={cartAddQty}
             >
