@@ -1,9 +1,9 @@
 "use server";
 
 import { db } from "@/drizzle/db";
-import { carts, orderItems, orders } from "@/drizzle/schema";
+import { carts, orderItems, orders, products } from "@/drizzle/schema";
 import { auth } from "@/lib/auth";
-import { eq } from "drizzle-orm";
+import { eq, or } from "drizzle-orm";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -50,5 +50,18 @@ export async function placeOrder(info: PlaceOrderInterface) {
   //...........inserting and deleting cart........
   await db.insert(orderItems).values([...insertData]);
   await db.delete(carts).where(eq(carts.userId, account.user.id));
+  //.........update quantity of the product..............//
+  const buyingProducts = await db
+    .select()
+    .from(products)
+    .where(or(...cartsInfo.map((c) => eq(products.id, c.productId))));
+  buyingProducts.forEach(async (pro) => {
+    const newStock = cartsInfo.find((c) => c.productId === pro.id)?.quantity!;
+    await db
+      .update(products)
+      .set({ stocks: String(Number(pro.stocks) - newStock) })
+      .where(eq(products.id, pro.id));
+  });
+
   return { message: "success" };
 }

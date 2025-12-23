@@ -5,8 +5,15 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { ShoppingBag, Truck, Wallet, User, PackageCheck } from "lucide-react";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { getDashboardData } from "../../server/account.order";
+import Link from "next/link";
 
 export function UserDashboard() {
+  const { data } = useSuspenseQuery({
+    queryKey: ["account_dashboard_info"],
+    queryFn: () => getDashboardData(),
+  });
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -17,16 +24,30 @@ export function UserDashboard() {
             Welcome back, here’s an overview of your account
           </p>
         </div>
-        <Button size="sm" variant="outline">
-          View Profile
-        </Button>
+        <Link href={"/account/profile"}>
+          <Button size="sm" variant="outline">
+            View Profile
+          </Button>
+        </Link>
       </div>
 
       {/* Stats */}
       <div className="grid gap-4 sm:grid-cols-1 lg:grid-cols-3">
-        <StatCard title="Total Orders" value="24" icon={<ShoppingBag />} />
-        <StatCard title="Pending Orders" value="3" icon={<Truck />} />
-        <StatCard title="Completed" value="21" icon={<PackageCheck />} />
+        <StatCard
+          title="Total Orders"
+          value={data.allOrdersCount.toString()}
+          icon={<ShoppingBag />}
+        />
+        <StatCard
+          title="Pending Orders"
+          value={data.pendingOrdersCount.toString()}
+          icon={<Truck />}
+        />
+        <StatCard
+          title="Completed"
+          value={data.completedOrdersCount.toString()}
+          icon={<PackageCheck />}
+        />
       </div>
 
       {/* Main Grid */}
@@ -37,22 +58,26 @@ export function UserDashboard() {
             <CardTitle>Recent Orders</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            {[1, 2, 3].map((order) => (
+            {data.recentOrders.map((order) => (
               <div
-                key={order}
+                key={order.id}
                 className="flex items-center justify-between rounded-xl border p-4"
               >
                 <div>
-                  <p className="font-medium">Order #ORD-10{order}</p>
+                  <p className="text-sm font-medium">
+                    Order #{order.id.slice(0, 15)}...
+                  </p>
                   <p className="text-muted-foreground text-sm">
-                    Placed 2 days ago
+                    {order.createdAt.toDateString()}
                   </p>
                 </div>
                 <div className="flex items-center gap-3">
-                  <Badge variant="secondary">Processing</Badge>
-                  <Button size="sm" variant="outline">
-                    Details
-                  </Button>
+                  <Badge variant="secondary">{order.status}</Badge>
+                  <Link href={"/account/orders"}>
+                    <Button size="sm" variant="outline">
+                      Details
+                    </Button>
+                  </Link>
                 </div>
               </div>
             ))}
@@ -77,9 +102,11 @@ export function UserDashboard() {
               </div>
             </div>
             <Progress value={70} />
-            <Button size="sm" className="w-full">
-              Update Profile
-            </Button>
+            <Link href={"/account/profile"}>
+              <Button size="sm" className="w-full">
+                Update Profile
+              </Button>
+            </Link>
           </CardContent>
         </Card>
       </div>
@@ -93,9 +120,11 @@ export function UserDashboard() {
           <CardContent className="space-y-2">
             <p className="text-sm">Home Address</p>
             <p className="text-muted-foreground text-xs">Dhaka, Bangladesh</p>
-            <Button size="sm" variant="outline">
-              Manage Addresses
-            </Button>
+            <Link href={"/account/address"}>
+              <Button size="sm" variant="outline">
+                Manage Addresses
+              </Button>
+            </Link>
           </CardContent>
         </Card>
 
