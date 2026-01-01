@@ -11,3 +11,7 @@ export function generateNumericOTP(): string {
   const otp = Math.floor(Math.random() * (max - min + 1)) + min;
   return otp.toString();
 }
+
+export function formatTaka(num: number) {
+  return `${num} ৳`;
+}

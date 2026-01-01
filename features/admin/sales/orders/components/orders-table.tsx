@@ -9,7 +9,7 @@ import { getOrders } from "../queries";
 import ChangeOrderStatus, { OrderStatus } from "./change-status";
 import DetailOrdersItems from "./detail-order-items";
 
-export default function OrdersTable({
+export function OrdersTable({
   promise,
 }: {
   promise: ReturnType<typeof getOrders>;
@@ -60,17 +60,6 @@ export default function OrdersTable({
               access: {
                 show: "sheet",
                 component: <DetailOrdersItems orderId={row.original.id} />,
-              },
-            },
-            {
-              dropdownItem: (
-                <Fragment>
-                  <Trash /> Delete
-                </Fragment>
-              ),
-              access: {
-                show: "dialog",
-                component: <div>delete</div>,
               },
             },
           ]}

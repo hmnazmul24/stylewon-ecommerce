@@ -52,28 +52,30 @@ export function OrderListing() {
                 <Badge variant="outline" className="capitalize">
                   {order.status}
                 </Badge>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <Button
-                      disabled={isPending}
-                      variant={"ghost"}
-                      size={"icon-sm"}
-                    >
-                      <MoreVertical />
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent className="flex max-w-52 flex-col items-center gap-2 text-sm">
-                    <h2 className="text-center">
-                      do you want to cancel this order?
-                    </h2>
-                    <Button
-                      onClick={() => mutate({ orderId: order.id })}
-                      variant={"destructive"}
-                    >
-                      Cancel
-                    </Button>
-                  </PopoverContent>
-                </Popover>
+                {order.status === "pending" && (
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        disabled={isPending}
+                        variant={"ghost"}
+                        size={"icon-sm"}
+                      >
+                        <MoreVertical />
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="flex max-w-52 flex-col items-center gap-2 text-sm">
+                      <h2 className="text-center">
+                        do you want to cancel this order?
+                      </h2>
+                      <Button
+                        onClick={() => mutate({ orderId: order.id })}
+                        variant={"destructive"}
+                      >
+                        Cancel
+                      </Button>
+                    </PopoverContent>
+                  </Popover>
+                )}
               </div>
             </div>
 

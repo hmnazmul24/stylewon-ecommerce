@@ -43,7 +43,7 @@ export function generateFakeProducts(count: number): AddProductSchemaType[] {
       costOfGoods: costOfGoods.toString(),
       profit: profit.toString(),
       margin: margin.toString(),
-
+      brand: "No brand",
       images: faker.helpers.shuffle(images),
 
       sizes: productSizes,

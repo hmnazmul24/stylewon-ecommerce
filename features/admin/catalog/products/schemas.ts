@@ -16,6 +16,7 @@ export const addProductSchema = z.object({
 
   //optional
 
+  brand: z.string(),
   profit: z.string(),
   margin: z.string(),
   description: z.string().optional(),
@@ -41,3 +42,15 @@ export const addProductSchema = z.object({
 });
 
 export type AddProductSchemaType = z.infer<typeof addProductSchema>;
+
+//-------------------------brands-----------------//
+
+export const addBrandSchema = z.object({
+  //required
+  brandName: z
+    .string()
+    .min(3, "Product name must be at least 3 characters.")
+    .max(60, "Product name must be at most 60 characters."),
+});
+
+export type AddBrandchemaType = z.infer<typeof addBrandSchema>;

@@ -2,6 +2,7 @@
 
 import { db } from "@/drizzle/db";
 import {
+  brands,
   categories,
   productColors,
   products,
@@ -18,6 +19,9 @@ export async function getProducts() {
 
 export async function productCategories() {
   return await db.select().from(categories);
+}
+export async function productBrands() {
+  return await db.select().from(brands);
 }
 
 ///.........................................................................

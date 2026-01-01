@@ -15,6 +15,7 @@ import AddProductStockAndShipping from "../components/add-product-stock-shipping
 import { addProductSchema, AddProductSchemaType } from "../schemas";
 import { getQueryClient } from "@/tanstack-query/get-query-client";
 import { AddProductCateogry } from "../components/add-product-category";
+import { AddProductBrand } from "../components/add-product-brand";
 
 export default function AddNewProductPage() {
   const qc = getQueryClient();
@@ -24,6 +25,7 @@ export default function AddNewProductPage() {
       name: "",
       description: "",
       costOfGoods: "",
+      brand: "",
       price: "",
       images: [],
       margin: "",
@@ -60,6 +62,7 @@ export default function AddNewProductPage() {
       </FieldGroup>
       <FieldGroup>
         <AddProductOptions form={form} />
+        <AddProductBrand addProductForm={form} />
         <AddProductCateogry />
         <AddProductStockAndShipping form={form} />
         <AddProdutActionBtns isPending={isPending} form={form} />

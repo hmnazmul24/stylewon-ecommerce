@@ -56,7 +56,7 @@ export function HeroCarousel() {
                   <div className="relative h-[200px] overflow-hidden rounded-sm md:h-80">
                     <Image
                       height={500}
-                      width={500}
+                      width={1000}
                       src={banner.imageUrl || ""}
                       alt={banner.id}
                       className="h-full w-full object-cover"

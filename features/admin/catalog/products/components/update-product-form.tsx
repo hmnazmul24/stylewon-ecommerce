@@ -16,6 +16,7 @@ import AddProductOptions from "./add-product-options";
 import AddProductPricing from "./add-product-pricing";
 import AddProductStockAndShipping from "./add-product-stock-shipping";
 import { useRouter } from "next/navigation";
+import { AddProductBrand } from "./add-product-brand";
 
 export function UpdateProductForm({
   info,
@@ -62,6 +63,7 @@ export function UpdateProductForm({
       </FieldGroup>
       <FieldGroup>
         <AddProductOptions form={form} />
+        <AddProductBrand addProductForm={form} />
         <AddProductCateogry />
         <AddProductStockAndShipping form={form} />
         <AddProdutActionBtns isPending={isPending} form={form} />

@@ -1,8 +1,18 @@
 "use server";
 
 import { db } from "@/drizzle/db";
-import { productColors, products, productSizes } from "@/drizzle/schema";
-import { addProductSchema, AddProductSchemaType } from "./schemas";
+import {
+  brands,
+  productColors,
+  products,
+  productSizes,
+} from "@/drizzle/schema";
+import {
+  AddBrandchemaType,
+  addBrandSchema,
+  addProductSchema,
+  AddProductSchemaType,
+} from "./schemas";
 import { eq } from "drizzle-orm";
 
 export async function addProduct(info: AddProductSchemaType) {
@@ -106,4 +116,25 @@ export async function deleteProduct({ productId }: { productId: string }) {
   await db.delete(productSizes).where(eq(productSizes.productId, productId));
   await db.delete(productColors).where(eq(productColors.productId, productId));
   return { message: "Product Deleted" };
+}
+
+//-----------------------------------brands--------------------------//
+
+export async function addBrand(input: AddBrandchemaType) {
+  const [exist] = await db
+    .select()
+    .from(brands)
+    .where(eq(brands.brandName, input.brandName));
+  if (exist) {
+    return { error: "This name already exists" };
+  }
+  await db.insert(brands).values(input);
+  return { message: "New brand added" };
+}
+
+//-----------------------------------brands--------------------------//
+
+export async function deleteBrand(brandId: string) {
+  await db.delete(brands).where(eq(brands.id, brandId));
+  return { message: "Brand Deleted" };
 }

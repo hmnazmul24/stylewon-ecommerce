@@ -79,30 +79,43 @@ function ChangeStatus({ currentStatus, onSave, isPending }: ChangeStatusProps) {
   const currentConfig = statusConfig[status];
 
   return (
-    <Card className="border-0 shadow-sm rounded-2xl overflow-hidden">
-      <div className="bg-gray-50 px-5 py-3 border-b border-gray-100">
-        <h3 className="font-semibold text-gray-900">Update Order Status</h3>
+    <Card className="overflow-hidden rounded-2xl border-0 shadow-sm">
+      <div className="border-b px-5 py-3">
+        <h3 className="font-semibold">Update Order Status</h3>
       </div>
 
-      <div className="p-5 space-y-5">
+      <div className="space-y-5 p-5">
         {/* Current Status Badge */}
         <div>
-          <p className="text-sm text-gray-600 mb-2">Current status</p>
-          <div
-            className={`inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium ${statusConfig[currentStatus].bg} ${statusConfig[currentStatus].color}`}
-          >
-            {statusConfig[currentStatus].label}
+          <p className="mb-2 text-sm">Current status</p>
+          <div className="flex items-center justify-start gap-3">
+            <div
+              className={`inline-flex items-center rounded-full px-3 py-1.5 text-sm font-medium ${statusConfig[currentStatus].bg} ${statusConfig[currentStatus].color}`}
+            >
+              {statusConfig[currentStatus].label}
+            </div>
+            {/* Preview of selected status */}
+            {status !== currentStatus && (
+              <div className="mt-3 flex items-center gap-2">
+                <span className="text-sm">Will change to →</span>
+                <span
+                  className={`inline-flex items-center rounded-full px-3 py-1 text-sm font-medium ${currentConfig.bg} ${currentConfig.color}`}
+                >
+                  {currentConfig.label}
+                </span>
+              </div>
+            )}
           </div>
         </div>
 
         {/* Status Selector */}
         <div>
-          <p className="text-sm text-gray-600 mb-2">Change to</p>
+          <p className="mb-2 text-sm">Change to</p>
           <Select
             value={status}
             onValueChange={(v) => setStatus(v as OrderStatus)}
           >
-            <SelectTrigger className="w-full h-12 text-base">
+            <SelectTrigger className="h-12 w-full text-base">
               <SelectValue placeholder="Select new status" />
             </SelectTrigger>
             <SelectContent>
@@ -110,9 +123,9 @@ function ChangeStatus({ currentStatus, onSave, isPending }: ChangeStatusProps) {
                 <SelectItem key={value} value={value}>
                   <div className="flex items-center gap-2">
                     <span
-                      className={`w-3 h-3 rounded-full ${config.bg.replace(
+                      className={`h-3 w-3 rounded-full ${config.bg.replace(
                         "100",
-                        "500"
+                        "500",
                       )}`}
                     />
                     <span>{config.label}</span>
@@ -121,25 +134,13 @@ function ChangeStatus({ currentStatus, onSave, isPending }: ChangeStatusProps) {
               ))}
             </SelectContent>
           </Select>
-
-          {/* Preview of selected status */}
-          {status !== currentStatus && (
-            <div className="mt-3 flex items-center gap-2">
-              <span className="text-sm text-gray-500">Will change to →</span>
-              <span
-                className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${currentConfig.bg} ${currentConfig.color}`}
-              >
-                {currentConfig.label}
-              </span>
-            </div>
-          )}
         </div>
 
         {/* Save Button */}
         <Button
           onClick={handleSave}
           disabled={status === currentStatus || isPending}
-          className="w-full py-6  text-base font-medium rounded-full"
+          className="w-full rounded-full py-6 text-base font-medium"
           size="lg"
         >
           {isPending ? (

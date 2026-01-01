@@ -83,6 +83,11 @@ export function DetailsBox({ id }: { id: string }) {
           <div>
             <h1 className="text-3xl font-semibold">{item.name}</h1>
           </div>
+          {item.brand && (
+            <div>
+              <h2 className="text-primary text-sm">Brand : {item.brand}</h2>
+            </div>
+          )}
           <FieldGroup>
             {item.sizes.length !== 0 && (
               <Field>

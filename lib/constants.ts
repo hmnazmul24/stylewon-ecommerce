@@ -1,4 +1,5 @@
 export const OTP_EXPIRE_IN_SECONDS = 60;
+
 export const districts = [
   {
     id: "1",
