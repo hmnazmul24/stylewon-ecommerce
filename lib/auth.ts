@@ -8,11 +8,13 @@ import { and, eq } from "drizzle-orm";
 import { OTP_EXPIRE_IN_SECONDS } from "./constants";
 import { sendSMS } from "./sms-service";
 import { sendEmailLink, sendEmailOTP } from "./email-service";
+import { admin } from "better-auth/plugins";
 
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
     provider: "pg",
   }),
+
   emailAndPassword: {
     enabled: true,
   },
@@ -123,5 +125,6 @@ export const auth = betterAuth({
         console.log("email varification otp =>", data);
       },
     }),
+    admin(),
   ],
 });

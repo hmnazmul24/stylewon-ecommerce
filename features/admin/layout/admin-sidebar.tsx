@@ -12,6 +12,8 @@ import {
 } from "@/components/ui/sidebar";
 import { AdminAccounts } from "@/features/admin/layout/admin-accounts";
 import { AdminSidebarMenu } from "@/features/admin/layout/admin-sidebar-menu";
+import { authClient } from "@/lib/auth-client";
+import { headers } from "next/headers";
 
 export function AdminSidebar({
   ...props
@@ -30,7 +32,9 @@ export function AdminSidebar({
                   <span className="truncate text-xl leading-6 font-bold">
                     Admin Panel
                   </span>
-                  <ShowRole />
+                  <React.Suspense fallback>
+                    <ShowRole />
+                  </React.Suspense>
                 </div>
               </div>
             </SidebarMenuButton>
@@ -50,5 +54,12 @@ export function AdminSidebar({
 }
 
 async function ShowRole() {
-  return <span className="truncate text-xs leading-tight">Manager</span>;
+  const res = await authClient.getSession({
+    fetchOptions: { headers: await headers() },
+  });
+  return (
+    <span className="truncate text-xs leading-tight">
+      {res.data?.user.role}
+    </span>
+  );
 }
