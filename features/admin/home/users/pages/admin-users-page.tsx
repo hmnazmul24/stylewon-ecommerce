@@ -25,12 +25,20 @@ async function Users() {
       headers: await headers(),
     },
   });
+
+  if (res.error) {
+    return (
+      <div className="text-destructive">
+        {res.error.message || "Something went wrong !"}
+      </div>
+    );
+  }
+
   if (!res.data) {
     return null;
   }
   return (
     <div>
-      {}
       <UserListingTable users={res.data.users} />
     </div>
   );
