@@ -1,15 +1,14 @@
 import {
   Album,
   AlbumIcon,
-  Box,
   Boxes,
-  DiscAlbum,
   Inbox,
   List,
   LucideIcon,
   Network,
   User,
   Users,
+  ChartPie,
 } from "lucide-react";
 export type NavMainType = {
   title: string;
@@ -86,8 +85,14 @@ export const adminSidebarNavItems: NavMainType[] = [
         icon: List,
         url: "/admin/sales/orders",
       },
+      {
+        title: "Purchase",
+        icon: ChartPie,
+        url: "/admin/sales/purchase",
+      },
     ],
   },
+
   {
     title: "Account",
     hide: true,

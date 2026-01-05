@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/table";
 import { useState } from "react";
 import { DataTableActions } from "./data-table-actions";
+import { DownloadAllQRCodePDF } from "@/features/admin/catalog/products/components/qr-code";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -62,7 +63,7 @@ export function DataTable<TData, TValue>({
   return (
     <div>
       <DataTableActions searchBy={searchBy} table={table} />
-      <div className="overflow-hidden border-dashed border rounded-xs">
+      <div className="overflow-hidden rounded-xs border border-dashed">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -74,7 +75,7 @@ export function DataTable<TData, TValue>({
                         ? null
                         : flexRender(
                             header.column.columnDef.header,
-                            header.getContext()
+                            header.getContext(),
                           )}
                     </TableHead>
                   );
@@ -93,7 +94,7 @@ export function DataTable<TData, TValue>({
                     <TableCell key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext()
+                        cell.getContext(),
                       )}
                     </TableCell>
                   ))}
@@ -112,7 +113,12 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-      <div className="flex items-center justify-end mt-10"></div>
+      <div className="mt-10 flex items-center justify-end"></div>
+      <DownloadAllQRCodePDF
+        products={
+          data as unknown as { id: string; price: string; name: string }[]
+        }
+      />
     </div>
   );
 }

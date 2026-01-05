@@ -1,7 +1,7 @@
 "use client";
 import { DataTable } from "@/components/table/data-table";
 import { ColumnDef } from "@tanstack/react-table";
-import { Edit, Notebook, Trash } from "lucide-react";
+import { Edit, Notebook, QrCode, Trash } from "lucide-react";
 import { Fragment, use } from "react";
 import DataTableActionDropdown from "@/components/table/data-table-action-dropdown";
 import { getProducts } from "../queries";
@@ -9,9 +9,10 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import { SingleProductDetailsInfo } from "./single-product-details-info";
 import { DeleteProduct } from "./delete-product";
+import { DownloadAllQRCodePDF, DownloadSingleQRCode } from "./qr-code";
 
 export default function ProductListingTable() {
-  const { data: allCourses } = useSuspenseQuery({
+  const { data: allProducts } = useSuspenseQuery({
     queryKey: ["products"],
     queryFn: () => getProducts(),
   });
@@ -87,6 +88,23 @@ export default function ProductListingTable() {
               {
                 dropdownItem: (
                   <Fragment>
+                    <QrCode /> QR code
+                  </Fragment>
+                ),
+                access: {
+                  show: "dialog",
+                  component: (
+                    <DownloadSingleQRCode
+                      id={row.original.id}
+                      name={row.original.name}
+                      price={row.original.price}
+                    />
+                  ),
+                },
+              },
+              {
+                dropdownItem: (
+                  <Fragment>
                     <Trash /> Delete
                   </Fragment>
                 ),
@@ -102,7 +120,7 @@ export default function ProductListingTable() {
     ];
   return (
     <div>
-      <DataTable columns={columns} data={allCourses} searchBy="name" />
+      <DataTable columns={columns} data={allProducts} searchBy="name" />
     </div>
   );
 }
