@@ -23,8 +23,6 @@ import {
 } from "@/components/ui/table";
 import { useState } from "react";
 import { DataTableActions } from "./data-table-actions";
-import { DownloadAllQRCodePDF } from "@/features/admin/catalog/products/components/qr-code";
-
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
@@ -114,11 +112,6 @@ export function DataTable<TData, TValue>({
         </Table>
       </div>
       <div className="mt-10 flex items-center justify-end"></div>
-      <DownloadAllQRCodePDF
-        products={
-          data as unknown as { id: string; price: string; name: string }[]
-        }
-      />
     </div>
   );
 }

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Edit } from "lucide-react";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { getBillingsInfo } from "../../server/billing.actions";
+import { districts, upazilas } from "@/lib/constants";
 
 export function ExistedBillingInfo() {
   const {
@@ -18,7 +19,10 @@ export function ExistedBillingInfo() {
       <div className="grid grid-cols-2 space-y-2 text-sm">
         <InfoRow label="Full Name" value={info.fullName} />
         <InfoRow label="Phone" value={info.phone} />
-        <InfoRow label="District" value={info.districtId} />
+        <InfoRow
+          label="District"
+          value={districts.find((d) => d.id, info.districtId)?.name || ""}
+        />
         <InfoRow label="Upazila" value={info.upazilaId} />
         <InfoRow label="Address" value={info.address} />
 

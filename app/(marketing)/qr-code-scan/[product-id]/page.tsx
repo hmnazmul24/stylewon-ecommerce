@@ -13,15 +13,8 @@ export default async function page(
     fetchOptions: { headers: await headers() },
   });
   if (res.data && res.data.user.role === "admin") {
-    redirect(`/admin/sales/purchase?productid=${productId}`);
+    redirect(`/admin/sales/purchase?productids=${productId}`);
   } else {
     redirect(`/product/${productId}`);
   }
-  return (
-    <div>
-      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur error
-      optio esse ipsa dolorem id ad eius saepe ex reprehenderit. Odit qui magnam
-      provident corporis libero non aperiam asperiores molestiae.
-    </div>
-  );
 }

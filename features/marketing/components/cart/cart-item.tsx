@@ -45,7 +45,7 @@ export function CartItem({
   const cartAddQty = () => {
     if (type === "local") {
       existCheckMutation.mutate({
-        productId: item.id!,
+        productId: item.productId,
         quantity: item.quantity + 1,
       });
     }

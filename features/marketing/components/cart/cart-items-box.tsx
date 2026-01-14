@@ -67,7 +67,7 @@ export function CartItemsBox({
               setShouldAuthBoxOpen(true);
             } else {
               if (total !== 0) {
-                if (billingMutation.data) {
+                if (billingMutation.data?.billings.districtId) {
                   router.push("/checkout/payment");
                 } else {
                   router.push(`/checkout?redirect_to=payment`);

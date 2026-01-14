@@ -105,6 +105,7 @@ export const auth = betterAuth({
 
       sendOTP: async ({ phoneNumber, code }, ctx) => {
         console.log("otp send to => ", phoneNumber, code);
+
         await sendSMS({ code, phoneNumber, type: "ACCOUNT_VERFICATION" });
       },
       signUpOnVerification: {

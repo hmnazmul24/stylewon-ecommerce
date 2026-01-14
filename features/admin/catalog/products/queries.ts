@@ -34,7 +34,7 @@ export async function getProductWithDetails(productId: string) {
   const sizeResults = await db
     .select()
     .from(productSizes)
-    .where(eq(productSizes.id, productId));
+    .where(eq(productSizes.productId, productId));
   const colorsResults = await db
     .select()
     .from(productColors)

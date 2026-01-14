@@ -60,7 +60,7 @@ export function UserListingTable({ users }: { users: UserWithRole[] }) {
   ];
   return (
     <div>
-      <DataTable columns={columns} data={users} searchBy="id" />
+      <DataTable columns={columns} data={users} searchBy="phoneNumber" />
     </div>
   );
 }

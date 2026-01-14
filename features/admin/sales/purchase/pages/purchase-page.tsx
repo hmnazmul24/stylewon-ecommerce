@@ -1,10 +1,15 @@
+import { SelectProducts } from "../components/select-products";
+import { SelectUser } from "../components/select-user";
+
 export function PurchasePage() {
   return (
-    <div>
-      Lorem ipsum, dolor sit amet consectetur adipisicing elit. Molestias
-      inventore nobis debitis, rerum aperiam natus soluta aliquid, quia animi at
-      distinctio error modi asperiores! Debitis consequatur maiores at
-      cupiditate exercitationem!
+    <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+      <section>
+        <SelectUser />
+      </section>
+      <section>
+        <SelectProducts />
+      </section>
     </div>
   );
 }

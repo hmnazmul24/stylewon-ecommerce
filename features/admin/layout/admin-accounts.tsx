@@ -98,7 +98,12 @@ export function AdminAccounts() {
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={async () => {
+                await authClient.signOut();
+                router.push("/");
+              }}
+            >
               <LogOut />
               Log out
             </DropdownMenuItem>

@@ -46,7 +46,12 @@ export default function AddNewProductPage() {
       qc.invalidateQueries({
         queryKey: ["marketing-product-details"],
       });
-      form.reset();
+
+      // emptying some fields
+      form.setValue("name", "");
+      form.setValue("images", []);
+      form.setValue("price", "");
+      form.setValue("stocks", "");
     },
   });
 
