@@ -14,8 +14,9 @@ import { AdminAccounts } from "@/features/admin/layout/admin-accounts";
 import { AdminSidebarMenu } from "@/features/admin/layout/admin-sidebar-menu";
 import { authClient } from "@/lib/auth-client";
 import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 
-export function AdminSidebar({
+export async function AdminSidebar({
   ...props
 }: React.ComponentProps<typeof Sidebar>) {
   return (
@@ -57,6 +58,9 @@ async function ShowRole() {
   const res = await authClient.getSession({
     fetchOptions: { headers: await headers() },
   });
+  if (res.data?.user.role !== "admin") {
+    redirect("/");
+  }
   return (
     <span className="truncate text-xs leading-tight">
       {res.data?.user.role}

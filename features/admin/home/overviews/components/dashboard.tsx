@@ -1,6 +1,7 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useQuery } from "@tanstack/react-query";
 import {
   ResponsiveContainer,
   LineChart,
@@ -14,6 +15,9 @@ import {
   Pie,
   Cell,
 } from "recharts";
+import { getDashboardData } from "../queries";
+import { Skeleton } from "@/components/ui/skeleton";
+import Error from "@/components/shared/error";
 
 const salesData = [
   { name: "Jan", value: 4000 },
@@ -42,34 +46,7 @@ const COLORS = ["#6366f1", "#22c55e", "#f97316", "#ef4444"];
 export default function Dashboard() {
   return (
     <div className="space-y-6">
-      <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-        <Card>
-          <CardHeader>
-            <CardTitle>Total Products</CardTitle>
-          </CardHeader>
-          <CardContent className="text-2xl font-semibold">1,248</CardContent>
-        </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle>Total Categories</CardTitle>
-          </CardHeader>
-          <CardContent className="text-2xl font-semibold">32</CardContent>
-        </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle>Total Users</CardTitle>
-          </CardHeader>
-          <CardContent className="text-2xl font-semibold">8,420</CardContent>
-        </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle>Total Sales</CardTitle>
-          </CardHeader>
-          <CardContent className="text-2xl font-semibold">
-            ৳ 2,45,000
-          </CardContent>
-        </Card>
-      </div>
+      <DashboardAboveSection />
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         <Card className="h-80">
@@ -146,6 +123,68 @@ export default function Dashboard() {
           </CardContent>
         </Card>
       </div>
+    </div>
+  );
+}
+
+function DashboardAboveSection() {
+  const { isPending, error, data } = useQuery({
+    queryKey: ["dashboard-info"],
+    queryFn: () => getDashboardData(),
+  });
+  if (isPending) {
+    return <DashboardAboveSectionSkeleton />;
+  }
+  if (error) {
+    return <Error />;
+  }
+  return (
+    <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+      <Card>
+        <CardHeader>
+          <CardTitle>Total Products</CardTitle>
+        </CardHeader>
+        <CardContent className="text-2xl font-semibold">
+          {data.productCount}
+        </CardContent>
+      </Card>
+      <Card>
+        <CardHeader>
+          <CardTitle>Total Categories</CardTitle>
+        </CardHeader>
+        <CardContent className="text-2xl font-semibold">
+          {data.categoryCount}
+        </CardContent>
+      </Card>
+      <Card>
+        <CardHeader>
+          <CardTitle>Total Users</CardTitle>
+        </CardHeader>
+        <CardContent className="text-2xl font-semibold">
+          {data.usersCount}
+        </CardContent>
+      </Card>
+      <Card>
+        <CardHeader>
+          <CardTitle>Total Brands</CardTitle>
+        </CardHeader>
+        <CardContent className="text-2xl font-semibold">
+          {data.brandCount}
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
+
+function DashboardAboveSectionSkeleton() {
+  return (
+    <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+      {Array.from({ length: 4 }).map((_, i) => (
+        <Skeleton key={i} className="space-y-3 rounded-lg p-6">
+          <Skeleton className="h-5 w-4/5 bg-gray-500/50" />
+          <Skeleton className="h-8 w-1/3 bg-gray-500/50" />
+        </Skeleton>
+      ))}
     </div>
   );
 }
