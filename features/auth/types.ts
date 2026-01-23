@@ -5,6 +5,7 @@ import { getUserInfo } from "./actions";
 export type AuthComponentPropsType = {
   onClose?: () => void;
   switchComponentTo?: (v: AuthComponentSelectType) => void;
+  onSuccessfullSignUp?: () => void;
 };
 export type ProfileComponentPropsType = {
   onSuccess?: () => void;

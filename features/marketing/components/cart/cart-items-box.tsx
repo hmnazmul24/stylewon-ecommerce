@@ -103,6 +103,14 @@ function AuthBox({ onClose }: { onClose: () => void }) {
           }
           onClose();
         }}
+        onSuccessfullSignUp={() => {
+          if (guestUserCartItems.length !== 0) {
+            setTimeout(() => {
+              router.push(`?local-cart-count=${guestUserCartItems.length}`);
+            }, 500);
+          }
+          onClose();
+        }}
       />
     </div>
   );

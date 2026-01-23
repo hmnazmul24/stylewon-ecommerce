@@ -9,6 +9,7 @@ export function PhoneNoOTPForm({
   switchComponentTo,
   onClose,
   type,
+  onSuccessfullSignUp,
 }: AuthComponentPropsType & { type: "SIGNIN" | "SIGNUP" }) {
   const { signupSigninPhoneNo } = useAuthStore();
 
@@ -41,6 +42,7 @@ export function PhoneNoOTPForm({
           onClose && onClose();
         }
         if (type === "SIGNUP") {
+          onSuccessfullSignUp && onSuccessfullSignUp();
           switchComponentTo && switchComponentTo("ADD_PASSWORD");
         }
       }}

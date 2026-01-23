@@ -4,6 +4,7 @@ import { db } from "@/drizzle/db";
 import { carts, orderItems, orders, products } from "@/drizzle/schema";
 import { auth } from "@/lib/auth";
 import { eq, or } from "drizzle-orm";
+import { revalidateTag } from "next/cache";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -63,5 +64,6 @@ export async function placeOrder(info: PlaceOrderInterface) {
       .where(eq(products.id, pro.id));
   });
 
+  revalidateTag("inventory", "max");
   return { message: "success" };
 }

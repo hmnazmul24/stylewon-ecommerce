@@ -2,7 +2,7 @@
 import { DataTable } from "@/components/table/data-table";
 import DataTableActionDropdown from "@/components/table/data-table-action-dropdown";
 import { ColumnDef } from "@tanstack/react-table";
-import { Boxes, Edit, SendToBack, Trash } from "lucide-react";
+import { Boxes } from "lucide-react";
 import { Fragment } from "react";
 
 import { useSuspenseQuery } from "@tanstack/react-query";

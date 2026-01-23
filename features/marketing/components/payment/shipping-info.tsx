@@ -15,6 +15,7 @@ import {
 import { placeOrder } from "../../server/placeorder.action";
 import { LoadingSwap } from "@/components/ui/loading-swap";
 import { getQueryClient } from "@/tanstack-query/get-query-client";
+import { cn } from "@/lib/utils";
 
 type ShippingMethod = "outside_dhaka" | "inside_dhaka";
 type PaymentMethod = "cod" | "bkash" | "pathao" | "card";
@@ -132,18 +133,21 @@ export function ShippingInfo() {
           onChange={setPayment}
         />
         <RadioRow
+          disabled
           label="Bkash"
           value="bkash"
           checked={payment}
           onChange={setPayment}
         />
         <RadioRow
+          disabled
           label="Pathao Pay"
           value="pathao"
           checked={payment}
           onChange={setPayment}
         />
         <RadioRow
+          disabled
           label="Pay with Card/Mobile Wallet"
           value="card"
           checked={payment}
@@ -183,6 +187,7 @@ interface RadioRowProps<T extends string> {
   checked: T;
   onChange: (v: T) => void;
   price?: string;
+  disabled?: boolean;
 }
 
 function RadioRow<T extends string>({
@@ -191,11 +196,18 @@ function RadioRow<T extends string>({
   checked,
   onChange,
   price,
+  disabled = false,
 }: RadioRowProps<T>) {
   return (
-    <label className="flex cursor-pointer items-center justify-between">
-      <div className="flex items-center gap-2">
+    <label className="flex items-center justify-between">
+      <div
+        className={cn(
+          "flex items-center gap-2",
+          disabled && "text-muted-foreground",
+        )}
+      >
         <input
+          disabled={disabled}
           type="radio"
           checked={checked === value}
           onChange={() => onChange(value)}

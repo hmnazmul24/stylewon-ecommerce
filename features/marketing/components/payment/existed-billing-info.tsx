@@ -13,6 +13,8 @@ export function ExistedBillingInfo() {
     queryKey: ["billings"],
     queryFn: () => getBillingsInfo(),
   });
+  console.log(info, "fasd");
+
   return (
     <div className="space-y-2 rounded-xl">
       {/* Content */}
@@ -21,9 +23,12 @@ export function ExistedBillingInfo() {
         <InfoRow label="Phone" value={info.phone} />
         <InfoRow
           label="District"
-          value={districts.find((d) => d.id, info.districtId)?.name || ""}
+          value={districts.find((d) => d.id === info.districtId)?.name || ""}
         />
-        <InfoRow label="Upazila" value={info.upazilaId} />
+        <InfoRow
+          label="Upazila"
+          value={upazilas.find((u) => u.id === info.upazilaId)?.name || ""}
+        />
         <InfoRow label="Address" value={info.address} />
 
         {info.email && <InfoRow label="Email" value={info.email} />}

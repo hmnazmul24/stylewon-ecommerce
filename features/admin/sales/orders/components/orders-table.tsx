@@ -43,12 +43,15 @@ export function OrdersTable({
               ),
               access: {
                 show: "dialog",
-                component: (
-                  <ChangeOrderStatus
-                    currentStatus={row.original.status as OrderStatus}
-                    orderId={row.original.id}
-                  />
-                ),
+                component:
+                  row.original.status === "canceled" ? (
+                    <div className="border p-10">Order is Cancelled !</div>
+                  ) : (
+                    <ChangeOrderStatus
+                      currentStatus={row.original.status as OrderStatus}
+                      orderId={row.original.id}
+                    />
+                  ),
               },
             },
             {

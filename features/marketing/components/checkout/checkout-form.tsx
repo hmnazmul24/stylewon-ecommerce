@@ -152,7 +152,7 @@ export function BillingForm() {
                     <SelectContent position="item-aligned">
                       {districts.map((d) => (
                         <SelectItem key={d.id} value={d.id}>
-                          {d.name} {d.id}
+                          {d.name}
                         </SelectItem>
                       ))}
                     </SelectContent>

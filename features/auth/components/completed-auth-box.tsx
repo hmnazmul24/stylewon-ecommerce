@@ -16,7 +16,13 @@ import { SignInForm } from "./signin-form";
 import { SignUpForm } from "./signup-form";
 import { EmailOTPForm } from "./email-otp-form";
 
-export function CompletedAuthBox({ onClose }: { onClose?: () => void }) {
+export function CompletedAuthBox({
+  onClose,
+  onSuccessfullSignUp,
+}: {
+  onClose?: () => void;
+  onSuccessfullSignUp?: () => void;
+}) {
   const [viewAuthComp, setViewAuthComp] =
     useState<AuthComponentSelectType>("SIGN_IN");
   return (
@@ -66,6 +72,7 @@ export function CompletedAuthBox({ onClose }: { onClose?: () => void }) {
             <FieldContent>
               <PhoneNoOTPForm
                 type="SIGNUP"
+                onSuccessfullSignUp={onSuccessfullSignUp}
                 switchComponentTo={setViewAuthComp}
               />
             </FieldContent>

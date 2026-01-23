@@ -55,11 +55,7 @@ export function OrderListing() {
                 {order.status === "pending" && (
                   <Popover>
                     <PopoverTrigger asChild>
-                      <Button
-                        disabled={isPending}
-                        variant={"ghost"}
-                        size={"icon-sm"}
-                      >
+                      <Button variant={"ghost"} size={"icon-sm"}>
                         <MoreVertical />
                       </Button>
                     </PopoverTrigger>
@@ -68,6 +64,7 @@ export function OrderListing() {
                         do you want to cancel this order?
                       </h2>
                       <Button
+                        disabled={isPending}
                         onClick={() => mutate({ orderId: order.id })}
                         variant={"destructive"}
                       >

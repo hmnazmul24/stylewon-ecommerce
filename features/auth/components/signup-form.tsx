@@ -21,7 +21,10 @@ import { AuthComponentPropsType } from "../types";
 import GoogleSignInButton from "./google-signin-button";
 import { SubmitButtonWithLoading } from "./submit-button-with-loading";
 
-export function SignUpForm({ switchComponentTo }: AuthComponentPropsType) {
+export function SignUpForm({
+  switchComponentTo,
+  onSuccessfullSignUp,
+}: AuthComponentPropsType) {
   const { setSignupSigninPhoneNo } = useAuthStore();
   const form = useForm<SignupSchemaType>({
     resolver: zodResolver(signupSchema),
